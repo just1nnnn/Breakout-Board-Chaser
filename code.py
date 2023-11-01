@@ -1,64 +1,74 @@
 import time
 import board
 import digitalio
+import pwmio
 
-led_0 = digitalio.DigitalInOut(board.GP0)
-led_0.direction = digitalio.Direction.OUTPUT
-led_1 = digitalio.DigitalInOut(board.GP1)
-led_1.direction = digitalio.Direction.OUTPUT
-led_2 = digitalio.DigitalInOut(board.GP2)
-led_2.direction = digitalio.Direction.OUTPUT
-led_3 = digitalio.DigitalInOut(board.GP3)
-led_3.direction = digitalio.Direction.OUTPUT
-led_4 = digitalio.DigitalInOut(board.GP4)
-led_4.direction = digitalio.Direction.OUTPUT
-led_5 = digitalio.DigitalInOut(board.GP5)
-led_5.direction = digitalio.Direction.OUTPUT
-led_6 = digitalio.DigitalInOut(board.GP6)
-led_6.direction = digitalio.Direction.OUTPUT
-led_7 = digitalio.DigitalInOut(board.GP7)
-led_7.direction = digitalio.Direction.OUTPUT
-led_8 = digitalio.DigitalInOut(board.GP8)
-led_8.direction = digitalio.Direction.OUTPUT
-led_9 = digitalio.DigitalInOut(board.GP9)
-led_9.direction = digitalio.Direction.OUTPUT
-led_10 = digitalio.DigitalInOut(board.GP10)
-led_10.direction = digitalio.Direction.OUTPUT
-led_11 = digitalio.DigitalInOut(board.GP11)
-led_11.direction = digitalio.Direction.OUTPUT
-led_12 = digitalio.DigitalInOut(board.GP12)
-led_12.direction = digitalio.Direction.OUTPUT
-led_13 = digitalio.DigitalInOut(board.GP13)
-led_13.direction = digitalio.Direction.OUTPUT
-led_14 = digitalio.DigitalInOut(board.GP14)
-led_14.direction = digitalio.Direction.OUTPUT
-led_15 = digitalio.DigitalInOut(board.GP15)
-led_15.direction = digitalio.Direction.OUTPUT
-led_16 = digitalio.DigitalInOut(board.GP16)
-led_16.direction = digitalio.Direction.OUTPUT
-led_17 = digitalio.DigitalInOut(board.GP17)
-led_17.direction = digitalio.Direction.OUTPUT
-led_18 = digitalio.DigitalInOut(board.GP18)
-led_18.direction = digitalio.Direction.OUTPUT
-led_19 = digitalio.DigitalInOut(board.GP19)
-led_19.direction = digitalio.Direction.OUTPUT
-led_20 = digitalio.DigitalInOut(board.GP20)
-led_20.direction = digitalio.Direction.OUTPUT
-led_21 = digitalio.DigitalInOut(board.GP21)
-led_21.direction = digitalio.Direction.OUTPUT
-led_22 = digitalio.DigitalInOut(board.GP22)
-led_22.direction = digitalio.Direction.OUTPUT
-led_26 = digitalio.DigitalInOut(board.GP26)
-led_26.direction = digitalio.Direction.OUTPUT
-led_27 = digitalio.DigitalInOut(board.GP27)
-led_27.direction = digitalio.Direction.OUTPUT
-led_28 = digitalio.DigitalInOut(board.GP28)
-led_28.direction = digitalio.Direction.OUTPUT
+from adafruit_motor import motor #Imports a function from the adafruit_motor library
+
+right_motor_forward = board.GP1 # Initializes the variable left_motor_forward and attaches it to GP12
+right_motor_backward = board.GP2 #Initializes the variable left_motor_backward and attaches it to GP13
+left_motor_forward = board.GP12
+left_motor_backward = board.GP13
+
+pwm_Ra = pwmio.PWMOut(right_motor_forward, frequency=10000) #Tells the controller that the motor is an input
+pwm_Rb = pwmio.PWMOut(right_motor_backward, frequency=10000) #Tells the controller that the motor is an output
+pwm_La = pwmio.PWMOut(left_motor_forward, frequency=10000)
+pwm_Lb = pwmio.PWMOut(left_motor_backward, frequency=10000)
+
+Right_Motor = motor.DCMotor(pwm_Ra, pwm_Rb) #Configuration line (it is required)
+Right_Motor_speed = 0 #Initializes the variable left_motor_forward and starts it at 0
+Left_Motor = motor.DCMotor(pwm_La, pwm_Lb)
+Left_Motor_speed = 0
+
+def forward():
+    Right_Motor_speed = .5
+    Right_Motor.throttle = Right_Motor_speed
+    Left_Motor_speed = .5
+    Left_Motor.throttle = Left_Motor_speed
+
+def backward():
+    Right_Motor_speed = -.5
+    Right_Motor.throttle = Right_Motor_speed
+    Left_Motor_speed = -.5
+    Left_Motor.throttle = Left_Motor_speed
+
+def left():
+    Right_Motor_speed = .5
+    Right_Motor.throttle = Right_Motor_speed
+    Left_Motor_speed = 0
+    Left_Motor.throttle = Left_Motor_speed
+
+def right():
+    Right_Motor_speed = 0
+    Right_Motor.throttle = Right_Motor_speed
+    Left_Motor_speed = .5
+    Left_Motor.throttle = Left_Motor_speed
+
+def stop():
+    Right_Motor_speed = 0
+    Right_Motor.throttle = Right_Motor_speed
+    Left_Motor_speed = 0
+    Left_Motor.throttle = Left_Motor_speed
 
 while True:
-    led_0.value = True
-    time.sleep(0.1)
-    led_0.value = False
-    led_1.value = True
-    time.sleep(0.1)
-    led_1.value = False
+
+    forward()
+    time.sleep(3)
+
+    stop()
+    time.sleep(0.5)
+
+    left()
+    time.sleep(1)
+
+    forward()
+    time.sleep(2)
+
+    left()
+    time.sleep(1)
+
+    forward()
+    time.sleep(1)
+
+    left()
+    time.sleep(1)
